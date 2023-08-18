@@ -1,26 +1,57 @@
 import re
 from datetime import datetime
+import logging
 
 def process_data(scraped_data):
     print("Processing data...")
     
+    # Configure the logging system
+    logging.basicConfig(filename='scraped_data.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    
     result = []
+    existing_logs = set()  # To store existing log entries
+    
+    # Read existing logs from the file
+    with open('scraped_data.log', 'r') as log_file:
+        for line in log_file:
+            if 'Bank:' in line and 'Date:' in line and 'Value:' in line:
+                bank_date_value = re.search(r'Bank: (.*?) \| Date: (.*?) \| Value: (.*?)$', line)
+                if bank_date_value:
+                    bank_name = bank_date_value.group(1)
+                    date = bank_date_value.group(2)
+                    value = bank_date_value.group(3)
+                    existing_logs.add((bank_name, date, value))
 
-    for url, value in scraped_data.items():
+    for data in scraped_data:
+        url = data['url']
+        value = data['value']
+        date = None
+        
         # Extract the bank name from the URL
         bank_name = re.search(r"//(?:www\.)?(.*?)/", url).group(1)
         bank_name = bank_name.capitalize()  # Optional: Capitalize the bank name
         
-        # Create a readable format with bank name and value
-        formatted_data = f"{bank_name}: {value}"
-        result.append(formatted_data)
-    
-    result_string = '\n'.join(result)
+        # Process the date based on the source
+        if 'date' in data:
+            date_text = data['date']
+            date_match = re.search(r'(\d{2}\.\d{2}.\d{4})', date_text)
+            if date_match:
+                date = datetime.strptime(date_match.group(1), '%d.%m.%Y').strftime('%Y-%m-%d')
+            else:
+                alt_date_match = re.search(r'(\d{2}-[A-Za-z]{3}-\d{4})', date_text)
+                if alt_date_match:
+                    alt_date = datetime.strptime(alt_date_match.group(1), '%d-%b-%Y')
+                    date = alt_date.strftime('%Y-%m-%d')
 
-    # Get today's date in the format YYYY-MM-DD
-    today_date = datetime.now().strftime("%Y-%m-%d")
+        if (bank_name, date, value) not in existing_logs:
+            logging.info(f"Bank: {bank_name} | Date: {date} | Value: {value}")
+            result.append({
+                "bank_name": bank_name,
+                "date": date,
+                "value": value
+            })
 
-    # Add today's date to the result string
-    result_string = f"{today_date}\n{result_string}"
-
-    return result_string
+            # Add the new log entry to the existing logs set
+            existing_logs.add((bank_name, date, value))
+   
+    return result
