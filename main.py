@@ -13,12 +13,11 @@ def main():
 
 def run_scraper_and_notify():
     try:
-        url = "https://www.abcbanking.mu/treasury/daily-indicative-foreign-exchange-rates/"
+        url = ["https://www.myt.mu/sinformer/foreignexchange", "https://www.abcbanking.mu/treasury/daily-indicative-foreign-exchange-rates/"]
         scraped_data = scraper.run_scraper(url)
         processed_data = data_processing.process_data(scraped_data)
         
         whatsapp.send_message(processed_data)
-        
 
     except Exception as e:
         print(e)

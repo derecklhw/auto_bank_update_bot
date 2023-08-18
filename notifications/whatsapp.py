@@ -1,24 +1,15 @@
 import pywhatkit as kit
-import pyautogui
-from pynput.keyboard import Key, Controller
-   
-import time
-
-keyboard = Controller()
-
+  
 def send_message(msg):
     try:
         kit.sendwhatmsg_instantly(
-            phone_no="+23057647563", 
+            phone_no="+23057871057",
             message=msg,
-            tab_close=True
+            wait_time=15,
+            tab_close=True,
+            close_time=10
         )
-        time.sleep(10)
-        pyautogui.click()
-        time.sleep(2)
-        keyboard.press(Key.enter)
-        keyboard.release(Key.enter)
-        print("Message sent!")
+        print("Message sent successfully!")
     except Exception as e:
         print(e)
         return
