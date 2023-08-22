@@ -1,13 +1,13 @@
 import re
 from datetime import datetime
-import logging
+from utils import logging
 
 def process_data(scraped_data):
     print("Processing data...")
     
-    # Configure the logging system
-    logging.basicConfig(filename='scraped_data.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    
+   # Configure the logger
+    logging.configure_logger()
+
     result = []
     existing_logs = set()  # To store existing log entries
     
@@ -44,7 +44,7 @@ def process_data(scraped_data):
                     date = alt_date.strftime('%Y-%m-%d')
 
         if (bank_name, date, value) not in existing_logs:
-            logging.info(f"Bank: {bank_name} | Date: {date} | Value: {value}")
+            logging.log_data(bank_name, date, value)
             result.append({
                 "bank_name": bank_name,
                 "date": date,
