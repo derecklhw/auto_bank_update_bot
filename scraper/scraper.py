@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def run_scraper(urls):
+def run_scraper(urls, currency_list):
     values = []
     for url in urls:
         print("Processing URL:", url)
@@ -30,11 +30,11 @@ def run_scraper(urls):
                 columns = row.find_all("td")
 
                 # Check if the row contains "Canada"
-                if any("canada" in col.get_text().lower() for col in columns):
-                    # Get the last column value
-                    last_column_value = columns[-1].get_text().strip()
-                    values.append({"url": url, "date": target_date, "value": last_column_value})
-                    print("Found 'Canada' in row. Selling:", last_column_value)
+                for currency in currency_list:
+                    if any(currency in col.get_text().lower() for col in columns):
+                        # Get the last column value
+                        last_column_value = columns[-1].get_text().strip()
+                        values.append({"url": url, "date": target_date,"currency": currency, "value": last_column_value})
 
     if values:
         return values
