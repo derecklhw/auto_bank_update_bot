@@ -14,24 +14,20 @@ def process_data(scraped_data):
     # Read existing logs from the file
     with open('scraped_data.log', 'r') as log_file:
         for line in log_file:
-            if 'Url:' in line and 'Date:' in line and 'Currency' in line and 'Value:' in line:
-                bank_date_value = re.search(r'Url: (.*?) \| Date: (.*?) \| Currency: (.*?) \| Value: (.*?)$', line)
+            if 'Url:' in line and 'Date:' in line and 'Country' in line and 'Value:' in line:
+                bank_date_value = re.search(r'Url: (.*?) \| Date: (.*?) \| Country: (.*?) \| Value: (.*?)$', line)
                 if bank_date_value:
                     url = bank_date_value.group(1)
                     date = bank_date_value.group(2)
-                    currency = bank_date_value.group(3)
+                    country = bank_date_value.group(3)
                     value = bank_date_value.group(4)
-                    existing_logs.add((url, date, currency, value))
+                    existing_logs.add((url, date, country, value))
 
     for data in scraped_data:
         url = data['url']
         value = data['value']
-        currency = data['currency']
+        country = data['country']
         date = None
-        # print("Processing URL:", url)
-        # # Extract the bank name from the URL
-        # bank_name = re.search(r"//(?:www\.)?(.*?)/", url).group(1)
-        # bank_name = bank_name.capitalize()  # Optional: Capitalize the bank name
         
         # Process the date based on the source
         if 'date' in data:
@@ -45,15 +41,13 @@ def process_data(scraped_data):
                     alt_date = datetime.strptime(alt_date_match.group(1), '%d-%b-%Y')
                     date = alt_date.strftime('%Y-%m-%d')
 
-        if (url, date, currency, value) not in existing_logs:
-            logging.log_data(url, date, currency, value)
+        if (url, date, country, value) not in existing_logs:
+            logging.log_data(url, date, country, value)
             result.append({
                 "url": url,
                 "date": date,
-                "currency": currency,
+                "country": country,
                 "value": value
             })
 
-            # Add the new log entry to the existing logs set
-            existing_logs.add((url, date, currency, value))
     return result

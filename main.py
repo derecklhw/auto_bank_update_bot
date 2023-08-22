@@ -17,10 +17,10 @@ def main():
 
 def run_scraper_and_notify(config):
     try:
-        url = config.get('url')
-        currency_list = config.get('currency-list')
+        url = config.get('urls')
+        country_list = config.get('country-list')
         phone_number = config.get('phone-number')
-        scraped_data = scraper.run_scraper(url, currency_list)
+        scraped_data = scraper.run_scraper(url, country_list)
         processed_data = data_processing.process_data(scraped_data)
         
         whatsapp.send_message(processed_data, phone_number)
