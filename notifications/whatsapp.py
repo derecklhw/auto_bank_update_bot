@@ -1,12 +1,12 @@
 import pywhatkit as kit
   
-def send_message(msg_list):
+def send_message(msg_list, phone_number):
     if msg_list:
         for msg in msg_list:
             msg = f"Bank: {msg['url']} | Date: {msg['date']} | Currency: {msg['currency']} | Value: {msg['value']}"
             try:
                 kit.sendwhatmsg_instantly(
-                    phone_no="+23057871057",
+                    phone_no=phone_number,
                     message=msg,
                     wait_time=10,
                     tab_close=True,
