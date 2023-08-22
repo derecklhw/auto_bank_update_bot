@@ -18,7 +18,7 @@ def main():
 def run_scraper_and_notify(config):
     try:
         url = config.get('url')
-        currency_list = config.get('currency_list')
+        currency_list = config.get('currency-list')
         scraped_data = scraper.run_scraper(url, currency_list)
         processed_data = data_processing.process_data(scraped_data)
         
