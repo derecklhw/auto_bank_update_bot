@@ -49,4 +49,14 @@ To run the data scraper and notification system, execute the following command:
 python main.py
 ```
 
-You can schedule this script to run periodically, e.g., daily at a specific time, using a task scheduler like Cron (Linux)
+### Scheduling the Script
+
+You can automate the execution of the script by scheduling it to run at specific times using a task scheduler like `Cron` or `systemd/timer` **(Linux/macOS)** or `Task Scheduler` **(Windows)**.
+
+Here's an example of scheduling the script to run every 15 minutes between 9:00 AM and 10:00 AM daily using `Cron` on Linux or macOS:
+
+```sh
+*/15 9 * * * /path/to/python /path/to/main.py
+```
+
+Make sure to replace `/usr/bin/python3` with the **actual path to your Python interpreter** and `/path/to/main.py` with the full path to your main.py script.
