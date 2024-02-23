@@ -1,6 +1,6 @@
 # AutoBankUpdateBot
 
-This Python project is designed to scrape forex selling data from specified bank URLs, process the data, and send notifications via WhatsApp. It is a versatile tool that can be configured to monitor and notify you about various data sources.
+This Python project is designed to scrape forex selling price data from specified bank URLs, process the data, and send notifications via WhatsApp. It is a versatile tool that can be configured to monitor and notify you about various data sources.
 
 ## Getting Started
 
